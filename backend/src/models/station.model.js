@@ -37,4 +37,4 @@ const stationSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("Station", stationSchema);
+export const Station = mongoose.model("Station", stationSchema);

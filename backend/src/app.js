@@ -3,10 +3,13 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 // Healthcheck Route
-import healthcheckRouter from "./routes/healthCheck.route.js";
+import healthcheckRouter from "./routes/healthCheck.routes.js";
 
 // User Routes
-import userRouter from "./routes/userRoutes.js";
+import userRouter from "./routes/user.routes.js";
+
+// Station Routes
+import stationRouter from "./routes/station.routes.js";
 
 const app = express();
 
@@ -22,7 +25,7 @@ app.use(
 );
 
 app.use(cookieParser());
-app.use(express.jsonj({ limit: "50mb" }));
+app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.static("public"));
 
@@ -31,5 +34,8 @@ app.use("/api/v1/healthcheck", healthcheckRouter);
 
 // User Routes
 app.use("/api/v1/users", userRouter);
+
+// Station Routes
+app.use("/api/v1/stations", stationRouter);
 
 export { app };
