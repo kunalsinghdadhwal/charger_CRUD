@@ -6,7 +6,7 @@ const router = useRouter()
 
 // Form data
 const registerForm = reactive({
-  fullName: '',
+  fullname: '',
   email: '',
   password: '',
 })
@@ -18,7 +18,7 @@ const successMessage = ref('')
 const showPassword = ref(false)
 
 // Form validation
-const fullNameError = ref('')
+const fullnameError = ref('')
 const emailError = ref('')
 const passwordError = ref('')
 
@@ -28,17 +28,17 @@ const validateEmail = (email: string) => {
 }
 
 const validateForm = () => {
-  fullNameError.value = ''
+  fullnameError.value = ''
   emailError.value = ''
   passwordError.value = ''
 
-  if (!registerForm.fullName.trim()) {
-    fullNameError.value = 'Full name is required'
+  if (!registerForm.fullname.trim()) {
+    fullnameError.value = 'Full name is required'
     return false
   }
 
-  if (registerForm.fullName.trim().length < 2) {
-    fullNameError.value = 'Full name must be at least 2 characters'
+  if (registerForm.fullname.trim().length < 2) {
+    fullnameError.value = 'Full name must be at least 2 characters'
     return false
   }
 
@@ -96,7 +96,7 @@ const handleRegister = async () => {
 
       // Reset form
       Object.assign(registerForm, {
-        fullName: '',
+        fullname: '',
         email: '',
         password: '',
       })
@@ -151,19 +151,19 @@ const togglePasswordVisibility = () => {
       <form @submit.prevent="handleRegister" class="register-form">
         <!-- Full Name Field -->
         <div class="form-group">
-          <label for="fullName" class="form-label">Full Name</label>
+          <label for="fullname" class="form-label">Full Name</label>
           <div class="input-wrapper">
             <input
-              id="fullName"
-              v-model="registerForm.fullName"
+              id="fullname"
+              v-model="registerForm.fullname"
               type="text"
               class="form-input"
-              :class="{ 'input-error': fullNameError }"
+              :class="{ 'input-error': fullnameError }"
               placeholder="Enter your full name"
               autocomplete="name"
             />
           </div>
-          <span v-if="fullNameError" class="field-error">{{ fullNameError }}</span>
+          <span v-if="fullnameError" class="field-error">{{ fullnameError }}</span>
         </div>
 
         <!-- Email Field -->
@@ -246,7 +246,13 @@ const togglePasswordVisibility = () => {
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 1rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    sans-serif;
 }
 
 .register-card {

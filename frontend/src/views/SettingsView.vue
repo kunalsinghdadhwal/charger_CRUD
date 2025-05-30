@@ -19,7 +19,7 @@
           <div class="card-body">
             <div class="profile-field">
               <label class="field-label">Full Name</label>
-              <p class="field-value">{{ user?.fullName || 'Loading...' }}</p>
+              <p class="field-value">{{ user?.fullname || 'Loading...' }}</p>
             </div>
             <div class="profile-field">
               <label class="field-label">Email Address</label>
@@ -57,15 +57,15 @@
                   required
                 />
               </div>
-              <button 
-                type="submit" 
-                class="btn btn-primary"
-                :disabled="isLoading"
-              >
+              <button type="submit" class="btn btn-primary" :disabled="isLoading">
                 <span v-if="isLoading" class="loading-spinner"></span>
                 {{ isLoading ? 'Updating...' : 'Update Password' }}
               </button>
-              <div v-if="passwordMessage" class="message-alert" :class="{ 'success': passwordMessage.includes('successfully') }">
+              <div
+                v-if="passwordMessage"
+                class="message-alert"
+                :class="{ success: passwordMessage.includes('successfully') }"
+              >
                 {{ passwordMessage }}
               </div>
             </form>
@@ -80,11 +80,10 @@
           <div class="card-body">
             <div class="action-group">
               <p class="action-description">
-                Sign out of your account on this device. You'll need to sign in again to access your dashboard.
+                Sign out of your account on this device. You'll need to sign in again to access your
+                dashboard.
               </p>
-              <button @click="handleLogout" class="btn btn-danger">
-                Sign Out
-              </button>
+              <button @click="handleLogout" class="btn btn-danger">Sign Out</button>
             </div>
           </div>
         </div>
@@ -121,7 +120,7 @@ const handleChangePassword = async () => {
   }
 
   const result = await changePassword(currentPassword.value, newPassword.value)
-  
+
   if (result.success) {
     passwordMessage.value = result.message
     currentPassword.value = ''
@@ -142,7 +141,13 @@ const handleLogout = async () => {
   min-height: 100vh;
   background-color: #f8fafc;
   padding: 1rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    sans-serif;
 }
 
 /* Header Styles */

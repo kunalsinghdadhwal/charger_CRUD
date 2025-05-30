@@ -1,6 +1,6 @@
 export interface User {
     _id: string
-    fullName: string
+    fullname: string
     email: string
     createdAt: string
     updatedAt: string

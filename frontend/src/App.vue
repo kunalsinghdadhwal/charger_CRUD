@@ -19,18 +19,16 @@ const handleLogout = async () => {
     <header v-if="isAuthenticated" class="app-header">
       <div class="header-content">
         <div class="brand">
-          <RouterLink to="/dashboard" class="brand-link">
-            EV Charger Management
-          </RouterLink>
+          <RouterLink to="/dashboard" class="brand-link"> EV Charger Management </RouterLink>
         </div>
-        
+
         <nav class="main-nav">
           <RouterLink to="/dashboard" class="nav-link">Dashboard</RouterLink>
           <RouterLink to="/settings" class="nav-link">Settings</RouterLink>
         </nav>
 
         <div class="user-menu">
-          <span class="user-greeting">Welcome, {{ user?.fullName }}</span>
+          <span class="user-greeting">Welcome, {{ user?.fullname }}</span>
           <button @click="handleLogout" class="logout-btn">Logout</button>
         </div>
       </div>
