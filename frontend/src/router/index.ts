@@ -31,6 +31,7 @@ const router = createRouter({
     {
       path: '/settings',
       name: 'settings',
+      // @ts-ignore
       component: () => import('../views/SettingsView.vue'),
       meta: { requiresAuth: true },
     },

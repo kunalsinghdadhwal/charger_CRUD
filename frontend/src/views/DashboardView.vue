@@ -108,11 +108,24 @@
                   </span>
                 </div>
                 <div class="card-body">
-                  <div class="station-info">
-                    <p><strong>Power Output:</strong> {{ station.powerOutput }}kW</p>
-                    <p><strong>Connector:</strong> {{ station.connectorType }}</p>
-                    <p><strong>Location:</strong> {{ station.location.latitude }}, {{ station.location.longitude }}</p>
-                    <p><strong>Created:</strong> {{ formatDate(station.createdAt) }}</p>
+                  <div class="card-content">
+                    <div class="station-info">
+                      <p><strong>Power Output:</strong> {{ station.powerOutput }}kW</p>
+                      <p><strong>Connector:</strong> {{ station.connectorType }}</p>
+                      <p><strong>Location:</strong> {{ station.location.latitude }}, {{ station.location.longitude }}</p>
+                      <p><strong>Created:</strong> {{ formatDate(station.createdAt) }}</p>
+                    </div>
+                    
+                    <!-- Default Map Section -->
+                    <div class="station-map-container">
+                      <MapComponent
+                        :latitude="station.location.latitude"
+                        :longitude="station.location.longitude"
+                        :interactive="false"
+                        height="180px"
+                        :zoom="10"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div class="card-actions">
@@ -153,6 +166,7 @@
                 max="90"
                 placeholder="e.g., 40.712776"
                 required 
+                @input="onCoordinateChange"
               />
             </div>
             <div class="form-group">
@@ -165,8 +179,23 @@
                 max="180"
                 placeholder="e.g., -74.005974"
                 required 
+                @input="onCoordinateChange"
               />
             </div>
+          </div>
+          
+          <!-- Interactive Map for Location Selection -->
+          <div class="form-group">
+            <label>Location (Click on map to select)</label>
+            <MapComponent
+              :latitude="stationForm.location.latitude || 40.712776"
+              :longitude="stationForm.location.longitude || -74.005974"
+              :interactive="true"
+              height="300px"
+              :zoom="10"
+              @locationChanged="onMapLocationChanged"
+            />
+            <p class="map-help-text">Click on the map to set the station location, or enter coordinates manually above.</p>
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -208,6 +237,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 import { stationApi, type Station, type CreateStationData } from '@/services/stationApi'
+import MapComponent from '@/components/MapComponent.vue'
 
 const router = useRouter()
 const { logout } = useAuth()
@@ -391,6 +421,17 @@ const handleLogout = async () => {
   if (result.success) {
     router.push('/login')
   }
+}
+
+// Map-related methods
+const onMapLocationChanged = (location: { latitude: number; longitude: number }) => {
+  stationForm.value.location.latitude = parseFloat(location.latitude.toFixed(6))
+  stationForm.value.location.longitude = parseFloat(location.longitude.toFixed(6))
+}
+
+const onCoordinateChange = () => {
+  // This method is called when coordinates are manually entered
+  // The reactive binding will automatically update the map
 }
 
 // Lifecycle
@@ -597,7 +638,7 @@ onMounted(() => {
 /* List View */
 .station-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
   gap: 1.5rem;
 }
 
@@ -659,10 +700,27 @@ onMounted(() => {
   padding: 1.5rem;
 }
 
+.card-content {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.station-info {
+  flex: 1;
+  min-width: 0;
+}
+
 .station-info p {
   margin: 0 0 0.5rem 0;
   font-size: 0.875rem;
   color: #4b5563;
+}
+
+.station-map-container {
+  flex: 0 0 200px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .card-actions {
@@ -671,6 +729,14 @@ onMounted(() => {
   padding: 1rem 1.5rem;
   background: #f9fafb;
   border-top: 1px solid #e5e7eb;
+}
+
+/* Map Styles */
+.map-help-text {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-style: italic;
 }
 
 /* Map View */
@@ -844,6 +910,16 @@ onMounted(() => {
 
   .station-grid {
     grid-template-columns: 1fr;
+  }
+
+  .card-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .station-map-container {
+    flex: none;
+    width: 100%;
   }
 
   .stats-grid {
