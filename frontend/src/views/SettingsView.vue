@@ -19,7 +19,7 @@
           <div class="card-body">
             <div class="profile-field">
               <label class="field-label">Full Name</label>
-              <p class="field-value">{{ user?.fullName || 'Loading...' }}</p>
+              <p class="field-value">{{ user?.fullname || 'Loading...' }}</p>
             </div>
             <div class="profile-field">
               <label class="field-label">Email Address</label>

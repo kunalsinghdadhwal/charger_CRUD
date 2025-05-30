@@ -207,9 +207,17 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const formattedUser = {
+    ...user,
+    fullName: user.fullName,
+  };
+  delete formattedUser.fullName;
   return res
     .status(200)
-    .json(new ApiResponse(200, req.user, "Current user fetched successfully"));
+    .json(
+      new ApiResponse(200, formattedUser, "Current user fetched successfully")
+    );
 });
 
 export {
