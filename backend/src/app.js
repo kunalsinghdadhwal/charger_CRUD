@@ -19,7 +19,7 @@ if (!process.env.CORS_ORIGIN) {
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://your-frontend-domain.com"],
+    origin: ["http://localhost:5173", "https://charger-crud.netlify.app"],
     credentials: true,
   })
 );
