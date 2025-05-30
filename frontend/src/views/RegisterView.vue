@@ -85,11 +85,11 @@ const handleRegister = async () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include', // Include credentials for future cookie support
       body: JSON.stringify(registerForm),
     })
 
     const data = await response.json()
+    console.log(data)
 
     if (response.ok && data.success) {
       successMessage.value = data.message || 'Account created successfully! Redirecting to login...'

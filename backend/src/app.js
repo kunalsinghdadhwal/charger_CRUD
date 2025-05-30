@@ -17,9 +17,11 @@ if (!process.env.CORS_ORIGIN) {
   throw new Error("CORS_ORIGIN environment variable is not set");
 }
 
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: ['http://localhost:5173', 'https://your-frontend-domain.com'],
+    credentials: true
   })
 );
 
