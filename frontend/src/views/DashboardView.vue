@@ -3,217 +3,198 @@
     <!-- Header Section -->
     <header class="dashboard-header">
       <div class="header-content">
-        <h1 class="dashboard-title">EV Charger Management Dashboard</h1>
+        <h1 class="dashboard-title">EV Station Management</h1>
         <div class="header-actions">
-          <button @click="refreshData" class="btn btn-secondary">
-            <span class="icon">🔄</span>
-            Refresh
+          <button @click="handleLogout" class="btn btn-secondary">
+            Logout
           </button>
+          <router-link to="/settings" class="btn btn-secondary">
+            Settings
+          </router-link>
           <button @click="showAddModal = true" class="btn btn-primary">
-            <span class="icon">➕</span>
-            Add Charger
+            Add Station
           </button>
         </div>
       </div>
     </header>
 
-    <!-- Stats Overview -->
-    <section class="stats-section">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">⚡</div>
-          <div class="stat-content">
-            <h3>Total Chargers</h3>
-            <p class="stat-number">{{ stats.totalChargers }}</p>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">🟢</div>
-          <div class="stat-content">
-            <h3>Active</h3>
-            <p class="stat-number">{{ stats.activeChargers }}</p>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">🔧</div>
-          <div class="stat-content">
-            <h3>Maintenance</h3>
-            <p class="stat-number">{{ stats.maintenanceChargers }}</p>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">🔴</div>
-          <div class="stat-content">
-            <h3>Offline</h3>
-            <p class="stat-number">{{ stats.offlineChargers }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Loading State -->
+    <div v-if="isLoading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading stations...</p>
+    </div>
 
-    <!-- Main Content Area -->
-    <main class="main-content">
-      <!-- Controls Bar -->
-      <div class="controls-bar">
-        <div class="search-container">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search chargers..."
-            class="search-input"
-          />
+    <!-- Error State -->
+    <div v-if="error" class="error-container">
+      <p class="error-message">{{ error }}</p>
+      <button @click="loadStations" class="btn btn-primary">Retry</button>
+    </div>
+
+    <!-- Main Content -->
+    <div v-if="!isLoading && !error">
+      <!-- Stats Overview -->
+      <section class="stats-section">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-content">
+              <h3>Total Stations</h3>
+              <p class="stat-number">{{ stats.totalStations }}</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-content">
+              <h3>Active</h3>
+              <p class="stat-number">{{ stats.activeStations }}</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-content">
+              <h3>Inactive</h3>
+              <p class="stat-number">{{ stats.inactiveStations }}</p>
+            </div>
+          </div>
         </div>
-        <div class="filter-container">
-          <select v-model="statusFilter" class="filter-select">
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="maintenance">Maintenance</option>
-            <option value="offline">Offline</option>
-          </select>
-          <select v-model="typeFilter" class="filter-select">
-            <option value="">All Types</option>
-            <option value="fast">Fast Charging</option>
-            <option value="standard">Standard</option>
-            <option value="rapid">Rapid</option>
-          </select>
-        </div>
-        <div class="view-toggle">
-          <button
-            @click="currentView = 'list'"
-            :class="{ active: currentView === 'list' }"
-            class="view-btn"
-          >
-            📋 List
-          </button>
-          <button
-            @click="currentView = 'map'"
-            :class="{ active: currentView === 'map' }"
-            class="view-btn"
-          >
-            🗺️ Map
+      </section>
+
+      <!-- Main Content Area -->
+      <main class="main-content">
+        <!-- Controls Bar -->
+        <div class="controls-bar">
+          <div class="search-container">
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search stations..."
+              class="search-input"
+            />
+          </div>
+          <div class="filter-container">
+            <select v-model="statusFilter" class="filter-select">
+              <option value="">All Status</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+            <select v-model="connectorTypeFilter" class="filter-select">
+              <option value="">All Connectors</option>
+              <option value="CCS">CCS</option>
+              <option value="CHAdeMO">CHAdeMO</option>
+              <option value="Type 2">Type 2</option>
+              <option value="Tesla">Tesla</option>
+            </select>
+          </div>
+          <button @click="loadStations" class="btn btn-secondary">
+            Refresh
           </button>
         </div>
-      </div>
 
-      <!-- Content Area -->
-      <div class="content-area">
-        <!-- List View -->
-        <div v-if="currentView === 'list'" class="list-view">
-          <div class="charger-grid">
-            <div
-              v-for="charger in filteredChargers"
-              :key="charger.id"
-              class="charger-card"
-              :class="`status-${charger.status}`"
-            >
-              <div class="card-header">
-                <h3 class="charger-name">{{ charger.name }}</h3>
-                <span class="status-badge" :class="`status-${charger.status}`">
-                  {{ charger.status }}
-                </span>
-              </div>
-              <div class="card-body">
-                <div class="charger-info">
-                  <p><strong>Location:</strong> {{ charger.location }}</p>
-                  <p><strong>Type:</strong> {{ charger.type }}</p>
-                  <p><strong>Power:</strong> {{ charger.power }}kW</p>
-                  <p><strong>Connector:</strong> {{ charger.connectorType }}</p>
-                  <p><strong>Price:</strong> ${{ charger.pricePerKwh }}/kWh</p>
+        <!-- Content Area -->
+        <div class="content-area">
+          <!-- List View -->
+          <div class="list-view">
+            <div v-if="filteredStations.length === 0" class="empty-state">
+              <p>No stations found matching your criteria.</p>
+            </div>
+            <div v-else class="station-grid">
+              <div
+                v-for="station in filteredStations"
+                :key="station._id"
+                class="station-card"
+                :class="`status-${station.status.toLowerCase()}`"
+              >
+                <div class="card-header">
+                  <h3 class="station-name">{{ station.name }}</h3>
+                  <span class="status-badge" :class="`status-${station.status.toLowerCase()}`">
+                    {{ station.status }}
+                  </span>
                 </div>
-              </div>
-              <div class="card-actions">
-                <button @click="editCharger(charger)" class="btn btn-small btn-secondary">
-                  Edit
-                </button>
-                <button @click="deleteCharger(charger.id)" class="btn btn-small btn-danger">
-                  Delete
-                </button>
+                <div class="card-body">
+                  <div class="station-info">
+                    <p><strong>Power Output:</strong> {{ station.powerOutput }}kW</p>
+                    <p><strong>Connector:</strong> {{ station.connectorType }}</p>
+                    <p><strong>Location:</strong> {{ station.location.latitude }}, {{ station.location.longitude }}</p>
+                    <p><strong>Created:</strong> {{ formatDate(station.createdAt) }}</p>
+                  </div>
+                </div>
+                <div class="card-actions">
+                  <button @click="editStation(station)" class="btn btn-small btn-secondary">
+                    Edit
+                  </button>
+                  <button @click="deleteStation(station._id)" class="btn btn-small btn-danger">
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Map View -->
-        <div v-if="currentView === 'map'" class="map-view">
-          <MapView
-            :chargers="filteredChargers"
-            :selected-charger="selectedCharger"
-            map-height="500px"
-            @charger-selected="onChargerSelected"
-            @edit-charger="editCharger"
-            @delete-charger="deleteCharger"
-          />
-        </div>
-      </div>
-    </main>
+      </main>
+    </div>
 
     <!-- Add/Edit Modal -->
     <div v-if="showAddModal || showEditModal" class="modal-overlay" @click="closeModals">
       <div class="modal" @click.stop>
         <div class="modal-header">
-          <h2>{{ showAddModal ? 'Add New Charger' : 'Edit Charger' }}</h2>
-          <button @click="closeModals" class="modal-close">✕</button>
+          <h2>{{ showAddModal ? 'Add New Station' : 'Edit Station' }}</h2>
+          <button @click="closeModals" class="modal-close">×</button>
         </div>
-        <form @submit.prevent="saveCharger" class="modal-body">
+        <form @submit.prevent="saveStation" class="modal-body">
           <div class="form-group">
-            <label>Charger Name</label>
-            <input v-model="chargerForm.name" type="text" required />
-          </div>
-          <div class="form-group">
-            <label>Location</label>
-            <input v-model="chargerForm.location" type="text" required />
+            <label>Station Name</label>
+            <input v-model="stationForm.name" type="text" required />
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Type</label>
-              <select v-model="chargerForm.type" required>
-                <option value="fast">Fast Charging</option>
-                <option value="standard">Standard</option>
-                <option value="rapid">Rapid</option>
-              </select>
+              <label>Latitude</label>
+              <input 
+                v-model.number="stationForm.location.latitude" 
+                type="number" 
+                step="0.000001" 
+                min="-90" 
+                max="90"
+                placeholder="e.g., 40.712776"
+                required 
+              />
             </div>
             <div class="form-group">
-              <label>Power (kW)</label>
-              <input v-model="chargerForm.power" type="number" required />
+              <label>Longitude</label>
+              <input 
+                v-model.number="stationForm.location.longitude" 
+                type="number" 
+                step="0.000001" 
+                min="-180" 
+                max="180"
+                placeholder="e.g., -74.005974"
+                required 
+              />
             </div>
           </div>
           <div class="form-row">
+            <div class="form-group">
+              <label>Power Output (kW)</label>
+              <input v-model="stationForm.powerOutput" type="number" required />
+            </div>
             <div class="form-group">
               <label>Connector Type</label>
-              <select v-model="chargerForm.connectorType" required>
+              <select v-model="stationForm.connectorType" required>
+                <option value="">Select connector type</option>
                 <option value="CCS">CCS</option>
                 <option value="CHAdeMO">CHAdeMO</option>
                 <option value="Type 2">Type 2</option>
                 <option value="Tesla">Tesla</option>
               </select>
             </div>
-            <div class="form-group">
-              <label>Price per kWh ($)</label>
-              <input v-model="chargerForm.pricePerKwh" type="number" step="0.01" required />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Latitude</label>
-              <input v-model="chargerForm.latitude" type="number" step="any" required />
-            </div>
-            <div class="form-group">
-              <label>Longitude</label>
-              <input v-model="chargerForm.longitude" type="number" step="any" required />
-            </div>
           </div>
           <div class="form-group">
             <label>Status</label>
-            <select v-model="chargerForm.status" required>
-              <option value="active">Active</option>
-              <option value="maintenance">Maintenance</option>
-              <option value="offline">Offline</option>
+            <select v-model="stationForm.status" required>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
             </select>
           </div>
           <div class="modal-actions">
             <button type="button" @click="closeModals" class="btn btn-secondary">Cancel</button>
-            <button type="submit" class="btn btn-primary">
-              {{ showAddModal ? 'Add Charger' : 'Update Charger' }}
+            <button type="submit" class="btn btn-primary" :disabled="isLoading">
+              {{ showAddModal ? 'Add Station' : 'Update Station' }}
             </button>
           </div>
         </form>
@@ -224,246 +205,255 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import MapView from '@/components/MapView.vue'
+import { useRouter } from 'vue-router'
+import { useAuth } from '@/composables/useAuth'
+import { stationApi, type Station, type CreateStationData } from '@/services/stationApi'
+
+const router = useRouter()
+const { logout } = useAuth()
 
 // Types
-interface EVCharger {
-  id: string
-  name: string
-  location: string
-  type: 'fast' | 'standard' | 'rapid'
-  power: number
-  connectorType: string
-  pricePerKwh: number
-  status: 'active' | 'maintenance' | 'offline'
-  latitude: number
-  longitude: number
-  createdAt: string
-  updatedAt: string
-}
-
 interface Stats {
-  totalChargers: number
-  activeChargers: number
-  maintenanceChargers: number
-  offlineChargers: number
+  totalStations: number
+  activeStations: number
+  inactiveStations: number
 }
 
 // Reactive data
-const chargers = ref<EVCharger[]>([])
+const stations = ref<Station[]>([])
 const searchQuery = ref('')
 const statusFilter = ref('')
-const typeFilter = ref('')
-const currentView = ref<'list' | 'map'>('list')
+const connectorTypeFilter = ref('')
 const showAddModal = ref(false)
 const showEditModal = ref(false)
-const editingCharger = ref<EVCharger | null>(null)
-const selectedCharger = ref<EVCharger | null>(null)
+const editingStation = ref<Station | null>(null)
+const isLoading = ref(false)
+const error = ref('')
 
-const chargerForm = ref({
-  id: '',
+const stationForm = ref({
+  _id: '',
   name: '',
-  location: '',
-  type: 'fast' as 'fast' | 'standard' | 'rapid',
-  power: 0,
-  connectorType: 'CCS',
-  pricePerKwh: 0,
-  status: 'active' as 'active' | 'maintenance' | 'offline',
-  latitude: 0,
-  longitude: 0,
+  location: {
+    latitude: 0.0,
+    longitude: 0.0,
+  },
+  status: 'Active' as 'Active' | 'Inactive',
+  powerOutput: 0,
+  connectorType: '',
 })
 
 // Computed properties
 const stats = computed<Stats>(() => {
-  const total = chargers.value.length
-  const active = chargers.value.filter((c) => c.status === 'active').length
-  const maintenance = chargers.value.filter((c) => c.status === 'maintenance').length
-  const offline = chargers.value.filter((c) => c.status === 'offline').length
+  const total = stations.value.length
+  const active = stations.value.filter((s) => s.status === 'Active').length
+  const inactive = stations.value.filter((s) => s.status === 'Inactive').length
 
   return {
-    totalChargers: total,
-    activeChargers: active,
-    maintenanceChargers: maintenance,
-    offlineChargers: offline,
+    totalStations: total,
+    activeStations: active,
+    inactiveStations: inactive,
   }
 })
 
-const filteredChargers = computed(() => {
-  let filtered = chargers.value
+const filteredStations = computed(() => {
+  let filtered = stations.value
 
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
     filtered = filtered.filter(
-      (charger) =>
-        charger.name.toLowerCase().includes(query) ||
-        charger.location.toLowerCase().includes(query),
+      (station) =>
+        station.name.toLowerCase().includes(query) ||
+        station.connectorType.toLowerCase().includes(query),
     )
   }
 
   if (statusFilter.value) {
-    filtered = filtered.filter((charger) => charger.status === statusFilter.value)
+    filtered = filtered.filter((station) => station.status === statusFilter.value)
   }
 
-  if (typeFilter.value) {
-    filtered = filtered.filter((charger) => charger.type === typeFilter.value)
+  if (connectorTypeFilter.value) {
+    filtered = filtered.filter((station) => station.connectorType === connectorTypeFilter.value)
   }
 
   return filtered
 })
 
 // Methods
-const loadChargers = async () => {
+const loadStations = async () => {
+  isLoading.value = true
+  error.value = ''
   try {
-    // TODO: Replace with actual API call
-    // const response = await fetch('/api/chargers')
-    // chargers.value = await response.json()
-
-    // Mock data for development
-    chargers.value = [
-      {
-        id: '1',
-        name: 'Downtown Station A',
-        location: '123 Main St, Downtown',
-        type: 'fast',
-        power: 150,
-        connectorType: 'CCS',
-        pricePerKwh: 0.35,
-        status: 'active',
-        latitude: 40.7128,
-        longitude: -74.006,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        id: '2',
-        name: 'Mall Parking Lot',
-        location: '456 Shopping Blvd',
-        type: 'standard',
-        power: 50,
-        connectorType: 'Type 2',
-        pricePerKwh: 0.25,
-        status: 'active',
-        latitude: 40.7589,
-        longitude: -73.9851,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        id: '3',
-        name: 'Highway Rest Stop',
-        location: 'Interstate 95, Mile 45',
-        type: 'rapid',
-        power: 350,
-        connectorType: 'CCS',
-        pricePerKwh: 0.45,
-        status: 'maintenance',
-        latitude: 40.6892,
-        longitude: -74.0445,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    ]
-  } catch (error) {
-    console.error('Failed to load chargers:', error)
+    const response = await stationApi.getStations()
+    stations.value = response.data.stations
+  } catch (err) {
+    console.error('Failed to load stations:', err)
+    error.value = 'Failed to load stations. Please try again.'
+  } finally {
+    isLoading.value = false
   }
 }
 
-const refreshData = () => {
-  loadChargers()
-}
-
-const editCharger = (charger: EVCharger) => {
-  editingCharger.value = charger
-  chargerForm.value = { ...charger }
+const editStation = (station: Station) => {
+  editingStation.value = station
+  stationForm.value = {
+    _id: station._id,
+    name: station.name,
+    location: {
+      latitude: station.location.latitude,
+      longitude: station.location.longitude,
+    },
+    status: station.status,
+    powerOutput: station.powerOutput,
+    connectorType: station.connectorType,
+  }
   showEditModal.value = true
 }
 
-const deleteCharger = async (id: string) => {
-  if (confirm('Are you sure you want to delete this charger?')) {
+const deleteStation = async (id: string) => {
+  if (confirm('Are you sure you want to delete this station?')) {
+    isLoading.value = true
     try {
-      // TODO: Replace with actual API call
-      // await fetch(`/api/chargers/${id}`, { method: 'DELETE' })
-      chargers.value = chargers.value.filter((c) => c.id !== id)
-    } catch (error) {
-      console.error('Failed to delete charger:', error)
+      await stationApi.deleteStation(id)
+      stations.value = stations.value.filter((s) => s._id !== id)
+    } catch (err) {
+      console.error('Failed to delete station:', err)
+      error.value = 'Failed to delete station. Please try again.'
+    } finally {
+      isLoading.value = false
     }
   }
 }
 
-const saveCharger = async () => {
+const saveStation = async () => {
+  isLoading.value = true
+  error.value = ''
+  
   try {
     if (showAddModal.value) {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/chargers', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(chargerForm.value)
-      // })
-      // const newCharger = await response.json()
-
-      const newCharger = {
-        ...chargerForm.value,
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+      // Create new station
+      const stationData: CreateStationData = {
+        name: stationForm.value.name,
+        location: stationForm.value.location,
+        status: stationForm.value.status,
+        powerOutput: stationForm.value.powerOutput,
+        connectorType: stationForm.value.connectorType,
       }
-      chargers.value.push(newCharger)
+      
+      const response = await stationApi.createStation(stationData)
+      stations.value.push(response.data)
     } else {
-      // TODO: Replace with actual API call
-      // await fetch(`/api/chargers/${chargerForm.value.id}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(chargerForm.value)
-      // })
-
-      const index = chargers.value.findIndex((c) => c.id === chargerForm.value.id)
+      // Update existing station
+      const response = await stationApi.updateStation(stationForm.value._id, {
+        name: stationForm.value.name,
+        location: stationForm.value.location,
+        status: stationForm.value.status,
+        powerOutput: stationForm.value.powerOutput,
+        connectorType: stationForm.value.connectorType,
+      })
+      
+      const index = stations.value.findIndex((s) => s._id === stationForm.value._id)
       if (index !== -1) {
-        chargers.value[index] = {
-          ...chargerForm.value,
-          createdAt: chargers.value[index].createdAt,
-          updatedAt: new Date().toISOString(),
-        }
+        stations.value[index] = response.data
       }
     }
     closeModals()
-  } catch (error) {
-    console.error('Failed to save charger:', error)
+  } catch (err) {
+    console.error('Failed to save station:', err)
+    error.value = 'Failed to save station. Please try again.'
+  } finally {
+    isLoading.value = false
   }
 }
 
 const closeModals = () => {
   showAddModal.value = false
   showEditModal.value = false
-  editingCharger.value = null
-  chargerForm.value = {
-    id: '',
+  editingStation.value = null
+  stationForm.value = {
+    _id: '',
     name: '',
-    location: '',
-    type: 'fast',
-    power: 0,
-    connectorType: 'CCS',
-    pricePerKwh: 0,
-    status: 'active',
-    latitude: 0,
-    longitude: 0,
+    location: {
+      latitude: 0,
+      longitude: 0,
+    },
+    status: 'Active',
+    powerOutput: 0,
+    connectorType: '',
   }
 }
 
-const onChargerSelected = (charger: EVCharger) => {
-  selectedCharger.value = charger
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString()
+}
+
+const handleLogout = async () => {
+  const result = await logout()
+  if (result.success) {
+    router.push('/login')
+  }
 }
 
 // Lifecycle
 onMounted(() => {
-  loadChargers()
+  loadStations()
 })
 </script>
 
 <style scoped>
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
 .dashboard-container {
   min-height: 100vh;
   background-color: #f8fafc;
   padding: 1rem;
+}
+
+/* Loading and Error States */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f4f6;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.error-message {
+  color: #ef4444;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #6b7280;
 }
 
 /* Header Styles */
@@ -509,27 +499,18 @@ onMounted(() => {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  transition: transform 0.2s;
 }
 
-.stat-icon {
-  font-size: 2rem;
-  width: 3.5rem;
-  height: 3.5rem;
-  background: #f3f4f6;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.stat-card:hover {
+  transform: translateY(-2px);
 }
 
 .stat-content h3 {
-  margin: 0 0 0.25rem 0;
+  margin: 0 0 0.5rem 0;
   font-size: 0.875rem;
-  color: #6b7280;
   font-weight: 500;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -614,32 +595,28 @@ onMounted(() => {
 }
 
 /* List View */
-.charger-grid {
+.station-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 1.5rem;
 }
 
-.charger-card {
+.station-card {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.2s;
 }
 
-.charger-card:hover {
+.station-card:hover {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.charger-card.status-active {
+.station-card.status-active {
   border-left: 4px solid #10b981;
 }
 
-.charger-card.status-maintenance {
-  border-left: 4px solid #f59e0b;
-}
-
-.charger-card.status-offline {
+.station-card.status-inactive {
   border-left: 4px solid #ef4444;
 }
 
@@ -652,7 +629,7 @@ onMounted(() => {
   border-bottom: 1px solid #e5e7eb;
 }
 
-.charger-name {
+.station-name {
   margin: 0;
   font-size: 1.125rem;
   font-weight: 600;
@@ -673,12 +650,7 @@ onMounted(() => {
   color: #065f46;
 }
 
-.status-badge.status-maintenance {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.status-badge.status-offline {
+.status-badge.status-inactive {
   background: #fee2e2;
   color: #991b1b;
 }
@@ -687,7 +659,7 @@ onMounted(() => {
   padding: 1.5rem;
 }
 
-.charger-info p {
+.station-info p {
   margin: 0 0 0.5rem 0;
   font-size: 0.875rem;
   color: #4b5563;
@@ -721,12 +693,17 @@ onMounted(() => {
   text-decoration: none;
 }
 
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .btn-primary {
   background: #3b82f6;
   color: white;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background: #2563eb;
 }
 
@@ -735,7 +712,7 @@ onMounted(() => {
   color: white;
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover:not(:disabled) {
   background: #4b5563;
 }
 
@@ -744,17 +721,13 @@ onMounted(() => {
   color: white;
 }
 
-.btn-danger:hover {
+.btn-danger:hover:not(:disabled) {
   background: #dc2626;
 }
 
 .btn-small {
   padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
-}
-
-.icon {
-  font-size: 1rem;
 }
 
 /* Modal Styles */
@@ -869,7 +842,7 @@ onMounted(() => {
     max-width: none;
   }
 
-  .charger-grid {
+  .station-grid {
     grid-template-columns: 1fr;
   }
 
