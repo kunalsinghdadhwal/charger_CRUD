@@ -1,5 +1,6 @@
-/* color palette from <https://github.com/vuejs/theme> */
+/* EV Charger Management System Color Palette */
 :root {
+  /* Base colors */
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
@@ -10,18 +11,28 @@
 
   --vt-c-indigo: #2c3e50;
 
+  /* EV Theme Colors */
+  --vt-c-electric-blue: #667eea;
+  --vt-c-electric-purple: #764ba2;
+  --vt-c-electric-green: #10b981;
+  --vt-c-electric-yellow: #ffd700;
+  --vt-c-electric-orange: #f59e0b;
+  --vt-c-electric-red: #ef4444;
+
+  /* Dividers */
   --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
   --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
   --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
   --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
 
-  --vt-c-text-light-1: var(--vt-c-indigo);
+  /* Text colors */
+  --vt-c-text-light-1: #1f2937;
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
 }
 
-/* semantic color variables for this project */
+/* Semantic color variables for EV Charger Management System */
 :root {
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
@@ -32,6 +43,23 @@
 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
+
+  /* EV Theme semantic colors */
+  --color-primary: var(--vt-c-electric-blue);
+  --color-primary-gradient: linear-gradient(
+    45deg,
+    var(--vt-c-electric-blue),
+    var(--vt-c-electric-purple)
+  );
+  --color-success: var(--vt-c-electric-green);
+  --color-warning: var(--vt-c-electric-orange);
+  --color-danger: var(--vt-c-electric-red);
+  --color-accent: var(--vt-c-electric-yellow);
+
+  /* Status colors for chargers */
+  --color-charger-active: var(--vt-c-electric-green);
+  --color-charger-maintenance: var(--vt-c-electric-orange);
+  --color-charger-offline: var(--vt-c-electric-red);
 
   --section-gap: 160px;
 }
