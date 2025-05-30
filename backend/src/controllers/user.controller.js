@@ -69,7 +69,7 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(404, "User does not exist");
   }
 
-  const isPasswordValid = await user.isPasswordValid(password);
+  const isPasswordValid = await user.isPasswordCorrect(password);
 
   if (!isPasswordValid) {
     throw new ApiError(401, "Invalid user credentials");
@@ -85,7 +85,6 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const options = {
     httpOnly: true,
-    secure: true,
   };
 
   return res
@@ -119,7 +118,6 @@ const logoutUser = asyncHandler(async (req, res) => {
   );
   const options = {
     httpOnly: true,
-    secure: true,
   };
 
   return res
@@ -135,10 +133,11 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   if (!incomingRefreshToken) {
     throw new ApiError(401, "Unauthorized Request");
   }
+
   try {
     const decodedToken = jwt.verify(
       incomingRefreshToken,
-      process.env.JWT_REFRESH_TOKEN_SECRET
+      process.env.REFRESH_TOKEN_SECRET
     );
 
     const user = await User.findById(decodedToken?._id);
@@ -153,7 +152,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
     const options = {
       httpOnly: true,
-      secure: true,
     };
 
     const { accessToken, newRefreshToken } =
@@ -166,7 +164,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       .json(
         new ApiResponse(
           200,
-          { accessToken, refreshToken },
+          { accessToken, newRefreshToken },
           "Access token refreshed successfully"
         )
       );
@@ -194,6 +192,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
   }
 
   user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
 
   return res
     .status(200)
