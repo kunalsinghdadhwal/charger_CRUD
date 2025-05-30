@@ -3,46 +3,46 @@
     <!-- Header Section -->
     <header class="dashboard-header">
       <div class="header-content">
-        <h1 class="dashboard-title">EV Charger Management Dashboard</h1>
+        <h1 class="dashboard-title">EV Charger Management</h1>
         <div class="header-actions">
-          <button @click="refreshData" class="btn btn-secondary">
-            <span class="icon">🔄</span>
-            Refresh
+          <button @click="refreshData" class="btn btn-secondary" :disabled="isLoading">
+            {{ isLoading ? 'Loading...' : 'Refresh' }}
           </button>
           <button @click="showAddModal = true" class="btn btn-primary">
-            <span class="icon">➕</span>
             Add Charger
           </button>
         </div>
       </div>
     </header>
 
+    <!-- Error Message -->
+    <div v-if="error" class="error-message">
+      <p>{{ error }}</p>
+      <button @click="loadChargers" class="btn btn-secondary">Try Again</button>
+    </div>
+
     <!-- Stats Overview -->
     <section class="stats-section">
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-icon">⚡</div>
           <div class="stat-content">
             <h3>Total Chargers</h3>
             <p class="stat-number">{{ stats.totalChargers }}</p>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">🟢</div>
           <div class="stat-content">
             <h3>Active</h3>
             <p class="stat-number">{{ stats.activeChargers }}</p>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">🔧</div>
           <div class="stat-content">
             <h3>Maintenance</h3>
             <p class="stat-number">{{ stats.maintenanceChargers }}</p>
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">🔴</div>
           <div class="stat-content">
             <h3>Offline</h3>
             <p class="stat-number">{{ stats.offlineChargers }}</p>
@@ -224,9 +224,14 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { stationAPI, type Station, type CreateStationRequest, type UpdateStationRequest } from '@/services/stationApi'
+import { useAuth } from '@/composables/useAuth'
 import MapView from '@/components/MapView.vue'
 
-// Types
+// Auth composable
+const { user } = useAuth()
+
+// Types - Map Station to EVCharger for UI compatibility
 interface EVCharger {
   id: string
   name: string
@@ -249,6 +254,34 @@ interface Stats {
   offlineChargers: number
 }
 
+// Convert Station to EVCharger for UI
+const mapStationToCharger = (station: Station): EVCharger => ({
+  id: station._id,
+  name: station.name,
+  location: `${station.location.latitude}, ${station.location.longitude}`,
+  type: station.powerOutput >= 150 ? 'fast' : station.powerOutput >= 50 ? 'standard' : 'rapid',
+  power: station.powerOutput,
+  connectorType: station.connectorType,
+  pricePerKwh: 0.35, // Default value as it's not in backend model
+  status: station.status === 'Active' ? 'active' : 'offline',
+  latitude: station.location.latitude,
+  longitude: station.location.longitude,
+  createdAt: station.createdAt,
+  updatedAt: station.updatedAt,
+})
+
+// Convert EVCharger to Station for API
+const mapChargerToStation = (charger: any): CreateStationRequest | UpdateStationRequest => ({
+  name: charger.name,
+  location: {
+    latitude: Number(charger.latitude),
+    longitude: Number(charger.longitude),
+  },
+  powerOutput: Number(charger.power),
+  connectorType: charger.connectorType,
+  status: charger.status === 'active' ? 'Active' : 'Inactive',
+})
+
 // Reactive data
 const chargers = ref<EVCharger[]>([])
 const searchQuery = ref('')
@@ -259,6 +292,8 @@ const showAddModal = ref(false)
 const showEditModal = ref(false)
 const editingCharger = ref<EVCharger | null>(null)
 const selectedCharger = ref<EVCharger | null>(null)
+const isLoading = ref(false)
+const error = ref<string | null>(null)
 
 const chargerForm = ref({
   id: '',
@@ -313,58 +348,17 @@ const filteredChargers = computed(() => {
 
 // Methods
 const loadChargers = async () => {
+  isLoading.value = true
+  error.value = null
+  
   try {
-    // TODO: Replace with actual API call
-    // const response = await fetch('/api/chargers')
-    // chargers.value = await response.json()
-
-    // Mock data for development
-    chargers.value = [
-      {
-        id: '1',
-        name: 'Downtown Station A',
-        location: '123 Main St, Downtown',
-        type: 'fast',
-        power: 150,
-        connectorType: 'CCS',
-        pricePerKwh: 0.35,
-        status: 'active',
-        latitude: 40.7128,
-        longitude: -74.006,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        id: '2',
-        name: 'Mall Parking Lot',
-        location: '456 Shopping Blvd',
-        type: 'standard',
-        power: 50,
-        connectorType: 'Type 2',
-        pricePerKwh: 0.25,
-        status: 'active',
-        latitude: 40.7589,
-        longitude: -73.9851,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        id: '3',
-        name: 'Highway Rest Stop',
-        location: 'Interstate 95, Mile 45',
-        type: 'rapid',
-        power: 350,
-        connectorType: 'CCS',
-        pricePerKwh: 0.45,
-        status: 'maintenance',
-        latitude: 40.6892,
-        longitude: -74.0445,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    ]
-  } catch (error) {
-    console.error('Failed to load chargers:', error)
+    const response = await stationAPI.getStations({ limit: 100 })
+    chargers.value = response.stations.map(mapStationToCharger)
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Failed to load chargers'
+    console.error('Failed to load chargers:', err)
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -381,11 +375,11 @@ const editCharger = (charger: EVCharger) => {
 const deleteCharger = async (id: string) => {
   if (confirm('Are you sure you want to delete this charger?')) {
     try {
-      // TODO: Replace with actual API call
-      // await fetch(`/api/chargers/${id}`, { method: 'DELETE' })
+      await stationAPI.deleteStation(id)
       chargers.value = chargers.value.filter((c) => c.id !== id)
-    } catch (error) {
-      console.error('Failed to delete charger:', error)
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to delete charger'
+      console.error('Failed to delete charger:', err)
     }
   }
 }
@@ -393,41 +387,24 @@ const deleteCharger = async (id: string) => {
 const saveCharger = async () => {
   try {
     if (showAddModal.value) {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/chargers', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(chargerForm.value)
-      // })
-      // const newCharger = await response.json()
-
-      const newCharger = {
-        ...chargerForm.value,
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }
+      const stationData = mapChargerToStation(chargerForm.value)
+      const newStation = await stationAPI.createStation(stationData as CreateStationRequest)
+      const newCharger = mapStationToCharger(newStation)
       chargers.value.push(newCharger)
     } else {
-      // TODO: Replace with actual API call
-      // await fetch(`/api/chargers/${chargerForm.value.id}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(chargerForm.value)
-      // })
-
+      const stationData = mapChargerToStation(chargerForm.value)
+      const updatedStation = await stationAPI.updateStation(chargerForm.value.id, stationData)
+      const updatedCharger = mapStationToCharger(updatedStation)
+      
       const index = chargers.value.findIndex((c) => c.id === chargerForm.value.id)
       if (index !== -1) {
-        chargers.value[index] = {
-          ...chargerForm.value,
-          createdAt: chargers.value[index].createdAt,
-          updatedAt: new Date().toISOString(),
-        }
+        chargers.value[index] = updatedCharger
       }
     }
     closeModals()
-  } catch (error) {
-    console.error('Failed to save charger:', error)
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Failed to save charger'
+    console.error('Failed to save charger:', err)
   }
 }
 
@@ -460,10 +437,32 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* Import clean, modern fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 .dashboard-container {
   min-height: 100vh;
   background-color: #f8fafc;
   padding: 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Error Message */
+.error-message {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.error-message p {
+  margin: 0;
+  color: #dc2626;
+  font-weight: 500;
 }
 
 /* Header Styles */
@@ -482,8 +481,8 @@ onMounted(() => {
 }
 
 .dashboard-title {
-  font-size: 1.875rem;
-  font-weight: 700;
+  font-size: 1.75rem;
+  font-weight: 600;
   color: #1f2937;
   margin: 0;
 }
@@ -500,7 +499,7 @@ onMounted(() => {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
 }
 
@@ -509,24 +508,11 @@ onMounted(() => {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.stat-icon {
-  font-size: 2rem;
-  width: 3.5rem;
-  height: 3.5rem;
-  background: #f3f4f6;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-left: 4px solid #3b82f6;
 }
 
 .stat-content h3 {
-  margin: 0 0 0.25rem 0;
+  margin: 0 0 0.5rem 0;
   font-size: 0.875rem;
   color: #6b7280;
   font-weight: 500;
@@ -711,7 +697,7 @@ onMounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1.25rem;
   border: none;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -719,6 +705,12 @@ onMounted(() => {
   cursor: pointer;
   transition: all 0.2s;
   text-decoration: none;
+  font-family: inherit;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .btn-primary {
@@ -726,17 +718,17 @@ onMounted(() => {
   color: white;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background: #2563eb;
 }
 
 .btn-secondary {
-  background: #6b7280;
-  color: white;
+  background: #f3f4f6;
+  color: #374151;
 }
 
-.btn-secondary:hover {
-  background: #4b5563;
+.btn-secondary:hover:not(:disabled) {
+  background: #e5e7eb;
 }
 
 .btn-danger {
@@ -744,17 +736,13 @@ onMounted(() => {
   color: white;
 }
 
-.btn-danger:hover {
+.btn-danger:hover:not(:disabled) {
   background: #dc2626;
 }
 
 .btn-small {
-  padding: 0.25rem 0.75rem;
+  padding: 0.375rem 0.75rem;
   font-size: 0.75rem;
-}
-
-.icon {
-  font-size: 1rem;
 }
 
 /* Modal Styles */
