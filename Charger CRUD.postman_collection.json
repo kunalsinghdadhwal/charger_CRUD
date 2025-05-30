@@ -1,0 +1,1498 @@
+{
+	"info": {
+		"_postman_id": "329241d9-8c81-46fc-994e-1981ac7fb247",
+		"name": "Charger CRUD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39960050"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullname\" : \"Kunal Singh\",\r\n    \"email\" : \"test@example.com\",\r\n    \"password\" : \"password\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUserURL}}/register",
+							"host": [
+								"{{baseUserURL}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Register",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fullname\" : \"Kunal Singh\",\r\n    \"email\" : \"test@example.com\",\r\n    \"password\" : \"password\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUserURL}}/register",
+									"host": [
+										"{{baseUserURL}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "274"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:29:08 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"112-8Iu3TQT7AUt+G5k5sx5uFXu3LIQ\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::qptsx-1748600945870-c5d05697ae74"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"68398873d752bf87742aef7f\",\n        \"fullName\": \"Kunal Singh\",\n        \"email\": \"test@example.com\",\n        \"refreshToken\": null,\n        \"createdAt\": \"2025-05-30T10:29:07.521Z\",\n        \"updatedAt\": \"2025-05-30T10:29:07.521Z\",\n        \"__v\": 0\n    },\n    \"message\": \"User registered successfully\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "Same Email",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\" : \"test@example.com\",\r\n    \"password\" : \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUserURL}}/register",
+									"host": [
+										"{{baseUserURL}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "135"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'none'"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:29:29 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::889dk-1748600968882-eca060573009"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <meta charset=\"utf-8\">\n        <title>Error</title>\n    </head>\n    <body>\n        <pre>Conflict</pre>\n    </body>\n</html>"
+						},
+						{
+							"name": "Not All fields GIven",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\" : \"foo@example.com\",\r\n    \"password\" : \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUserURL}}/register",
+									"host": [
+										"{{baseUserURL}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "138"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'none'"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:34:08 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::9lv2f-1748601248011-a43eee676f66"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <meta charset=\"utf-8\">\n        <title>Error</title>\n    </head>\n    <body>\n        <pre>Bad Request</pre>\n    </body>\n</html>"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"test@example.com\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUserURL}}/login",
+							"host": [
+								"{{baseUserURL}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\" : \"test@example.com\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUserURL}}/login",
+									"host": [
+										"{{baseUserURL}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "710"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:35:22 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"2c6-S6v6qzpFvYvXEzne2QcKxJGKIsM\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM5ODg3M2Q3NTJiZjg3NzQyYWVmN2YiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJmdWxsTmFtZSI6Ikt1bmFsIFNpbmdoIiwiaWF0IjoxNzQ4NjAxMzIxLCJleHAiOjE3NDg2ODc3MjF9.vrxgvYKOz5t9-6iO95vQo1jNX47PWSxKliVSYeBsyf8; Path=/; HttpOnly"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM5ODg3M2Q3NTJiZjg3NzQyYWVmN2YiLCJpYXQiOjE3NDg2MDEzMjEsImV4cCI6MTc0OTQ2NTMyMX0.dWt_kVZALh5shGeptfHgJhwdw1h6swkwnOO0cpCP5yU; Path=/; HttpOnly"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::gdl8j-1748601320856-a256831973ea"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"user\": {\n            \"_id\": \"68398873d752bf87742aef7f\",\n            \"fullName\": \"Kunal Singh\",\n            \"email\": \"test@example.com\",\n            \"createdAt\": \"2025-05-30T10:29:07.521Z\",\n            \"updatedAt\": \"2025-05-30T10:35:21.762Z\",\n            \"__v\": 0\n        },\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM5ODg3M2Q3NTJiZjg3NzQyYWVmN2YiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJmdWxsTmFtZSI6Ikt1bmFsIFNpbmdoIiwiaWF0IjoxNzQ4NjAxMzIxLCJleHAiOjE3NDg2ODc3MjF9.vrxgvYKOz5t9-6iO95vQo1jNX47PWSxKliVSYeBsyf8\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM5ODg3M2Q3NTJiZjg3NzQyYWVmN2YiLCJpYXQiOjE3NDg2MDEzMjEsImV4cCI6MTc0OTQ2NTMyMX0.dWt_kVZALh5shGeptfHgJhwdw1h6swkwnOO0cpCP5yU\"\n    },\n    \"message\": \"User logged in successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUserURL}}/logout",
+							"host": [
+								"{{baseUserURL}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Logout",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUserURL}}/logout",
+									"host": [
+										"{{baseUserURL}}"
+									],
+									"path": [
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "84"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:35:31 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"54-cRDQCqHHs/PqDsd/ZqsWF4q4TZs\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "accessToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "refreshToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::gcrmk-1748601331155-1d4d15d7a131"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {},\n    \"message\": \"User logged out successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUserURL}}/refresh-token",
+							"host": [
+								"{{baseUserURL}}"
+							],
+							"path": [
+								"refresh-token"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Refresh Token",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUserURL}}/refresh-token",
+									"host": [
+										"{{baseUserURL}}"
+									],
+									"path": [
+										"refresh-token"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "348"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:35:44 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"15c-+KjQJAoyND/ekQYr+gnp9FG4m18\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM5ODg3M2Q3NTJiZjg3NzQyYWVmN2YiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJmdWxsTmFtZSI6Ikt1bmFsIFNpbmdoIiwiaWF0IjoxNzQ4NjAxMzQ0LCJleHAiOjE3NDg2ODc3NDR9.1HvoXxXIiPvK5UXJzAyqWbI7okzyYHVY9WbnIf-yKAs; Path=/; HttpOnly"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "refreshToken=undefined; Path=/; HttpOnly"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::pbqnz-1748601344249-cc87551bfd77"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODM5ODg3M2Q3NTJiZjg3NzQyYWVmN2YiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJmdWxsTmFtZSI6Ikt1bmFsIFNpbmdoIiwiaWF0IjoxNzQ4NjAxMzQ0LCJleHAiOjE3NDg2ODc3NDR9.1HvoXxXIiPvK5UXJzAyqWbI7okzyYHVY9WbnIf-yKAs\"\n    },\n    \"message\": \"Access token refreshed successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Current User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUserURL}}/current-user",
+							"host": [
+								"{{baseUserURL}}"
+							],
+							"path": [
+								"current-user"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Current User",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUserURL}}/current-user",
+									"host": [
+										"{{baseUserURL}}"
+									],
+									"path": [
+										"current-user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Age",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "259"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:35:51 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"103-uDPE+PCkOBCawN0PR5FPCoREz98\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::q8bb6-1748601351205-6554bf347b8c"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"68398873d752bf87742aef7f\",\n        \"fullName\": \"Kunal Singh\",\n        \"email\": \"test@example.com\",\n        \"createdAt\": \"2025-05-30T10:29:07.521Z\",\n        \"updatedAt\": \"2025-05-30T10:35:44.782Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Current user fetched successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currentPassword\": \"password\",\r\n    \"newPassword\": \"strongpassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUserURL}}/change-password",
+							"host": [
+								"{{baseUserURL}}"
+							],
+							"path": [
+								"change-password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Change Password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"currentPassword\": \"password\",\r\n    \"newPassword\": \"strongpassword\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUserURL}}/change-password",
+									"host": [
+										"{{baseUserURL}}"
+									],
+									"path": [
+										"change-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "85"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:35:59 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"55-CyGJCaxqcCXrzMloar9z7m95mvk\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::xtphc-1748601358855-cd25e389ee41"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {},\n    \"message\": \"Password changed successfully\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Stations",
+			"item": [
+				{
+					"name": "Create Station",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"GreenCharge Station A1\",\r\n  \"location\": {\r\n    \"latitude\": 28.6139,\r\n    \"longitude\": 77.2090\r\n  },\r\n  \"status\": \"Active\",\r\n  \"powerOutput\": 50,\r\n  \"connectorType\": \"Type2\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseStationURL}}",
+							"host": [
+								"{{baseStationURL}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Station",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"GreenCharge Station A1\",\r\n  \"location\": {\r\n    \"latitude\": 28.6139,\r\n    \"longitude\": 77.2090\r\n  },\r\n  \"status\": \"Active\",\r\n  \"powerOutput\": 50,\r\n  \"connectorType\": \"Type2\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseStationURL}}",
+									"host": [
+										"{{baseStationURL}}"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "344"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:36:11 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"158-Kntr/kq7ukeG6cW+EaX3fdydI0s\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::b6dl2-1748601370349-fa196bc9f09b"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 201,\n    \"data\": {\n        \"name\": \"GreenCharge Station A1\",\n        \"location\": {\n            \"latitude\": 28.6139,\n            \"longitude\": 77.209\n        },\n        \"status\": \"Active\",\n        \"powerOutput\": 50,\n        \"connectorType\": \"Type2\",\n        \"_id\": \"68398a1a38ef509737aa1ca3\",\n        \"createdAt\": \"2025-05-30T10:36:10.881Z\",\n        \"updatedAt\": \"2025-05-30T10:36:10.881Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Station created successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "All Stations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseStationURL}}",
+							"host": [
+								"{{baseStationURL}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "All Stations",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseStationURL}}",
+									"host": [
+										"{{baseStationURL}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Age",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "470"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:36:19 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"1d6-syu6P0FrmRXcfSFGVvrygOVjhdg\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::67gfh-1748601377499-366a07cf6596"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"stations\": [\n            {\n                \"_id\": \"68398a1a38ef509737aa1ca3\",\n                \"name\": \"GreenCharge Station A1\",\n                \"location\": {\n                    \"latitude\": 28.6139,\n                    \"longitude\": 77.209\n                },\n                \"status\": \"Active\",\n                \"powerOutput\": 50,\n                \"connectorType\": \"Type2\",\n                \"createdAt\": \"2025-05-30T10:36:10.881Z\",\n                \"updatedAt\": \"2025-05-30T10:36:10.881Z\",\n                \"__v\": 0\n            }\n        ],\n        \"pagination\": {\n            \"currentPage\": 1,\n            \"totalPages\": 1,\n            \"totalStations\": 1,\n            \"hasNextPage\": false,\n            \"hasPreviousPage\": false\n        }\n    },\n    \"message\": \"Stations retrieved successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Station By ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"GreenCharge Station A1\",\r\n  \"location\": {\r\n    \"latitude\": 28.6139,\r\n    \"longitude\": 77.2090\r\n  },\r\n  \"status\": \"Active\",\r\n  \"powerOutput\": 50,\r\n  \"connectorType\": \"Type2\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseStationURL}}/68398a1a38ef509737aa1ca3",
+							"host": [
+								"{{baseStationURL}}"
+							],
+							"path": [
+								"68398a1a38ef509737aa1ca3"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Station By ID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"GreenCharge Station A1\",\r\n  \"location\": {\r\n    \"latitude\": 28.6139,\r\n    \"longitude\": 77.2090\r\n  },\r\n  \"status\": \"Active\",\r\n  \"powerOutput\": 50,\r\n  \"connectorType\": \"Type2\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "{{baseStationURL}}/68398a1a38ef509737aa1ca3",
+									"host": [
+										"{{baseStationURL}}"
+									],
+									"path": [
+										"68398a1a38ef509737aa1ca3"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Age",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "346"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:36:31 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"15a-6AoPh0Aq32q14kAM7oIvWEiyO5c\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::b6dl2-1748601390595-b2b9c38fca35"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"location\": {\n            \"latitude\": 28.6139,\n            \"longitude\": 77.209\n        },\n        \"_id\": \"68398a1a38ef509737aa1ca3\",\n        \"name\": \"GreenCharge Station A1\",\n        \"status\": \"Active\",\n        \"powerOutput\": 50,\n        \"connectorType\": \"Type2\",\n        \"createdAt\": \"2025-05-30T10:36:10.881Z\",\n        \"updatedAt\": \"2025-05-30T10:36:10.881Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Station retrieved successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New GreenCharge\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseStationURL}}/68398a1a38ef509737aa1ca3",
+							"host": [
+								"{{baseStationURL}}"
+							],
+							"path": [
+								"68398a1a38ef509737aa1ca3"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"New GreenCharge\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseStationURL}}/68398a1a38ef509737aa1ca3",
+									"host": [
+										"{{baseStationURL}}"
+									],
+									"path": [
+										"68398a1a38ef509737aa1ca3"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "337"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:37:07 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"151-1P327MLUCwu6nlwNp5cTvp4DV5Y\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::trc6v-1748601427029-08aed0b127cf"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"location\": {\n            \"latitude\": 28.6139,\n            \"longitude\": 77.209\n        },\n        \"_id\": \"68398a1a38ef509737aa1ca3\",\n        \"name\": \"New GreenCharge\",\n        \"status\": \"Active\",\n        \"powerOutput\": 50,\n        \"connectorType\": \"Type2\",\n        \"createdAt\": \"2025-05-30T10:36:10.881Z\",\n        \"updatedAt\": \"2025-05-30T10:37:07.571Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Station updated successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Station",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New GreenCharge\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseStationURL}}/68398a1a38ef509737aa1ca3",
+							"host": [
+								"{{baseStationURL}}"
+							],
+							"path": [
+								"68398a1a38ef509737aa1ca3"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete Station",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"New GreenCharge\"\r\n}"
+								},
+								"url": {
+									"raw": "{{baseStationURL}}/68398a1a38ef509737aa1ca3",
+									"host": [
+										"{{baseStationURL}}"
+									],
+									"path": [
+										"68398a1a38ef509737aa1ca3"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "356"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:38:37 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"164-tOeoIFmoqrCwXm/uW7KXp4heF9k\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::r5f9j-1748601517458-69f5730d4d66"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"deletedStation\": {\n            \"location\": {\n                \"latitude\": 28.6139,\n                \"longitude\": 77.209\n            },\n            \"_id\": \"68398a1a38ef509737aa1ca3\",\n            \"name\": \"New GreenCharge\",\n            \"status\": \"Active\",\n            \"powerOutput\": 50,\n            \"connectorType\": \"Type2\",\n            \"createdAt\": \"2025-05-30T10:36:10.881Z\",\n            \"updatedAt\": \"2025-05-30T10:37:07.571Z\",\n            \"__v\": 0\n        }\n    },\n    \"message\": \"Station deleted successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Status By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseStationURL}}/status/Active",
+							"host": [
+								"{{baseStationURL}}"
+							],
+							"path": [
+								"status",
+								"Active"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Status By ID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseStationURL}}/status/Active",
+									"host": [
+										"{{baseStationURL}}"
+									],
+									"path": [
+										"status",
+										"Active"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Age",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "349"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:38:24 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"15d-LGX+ZtTnr6PoNMVys61qQ2G8gAI\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::76ptt-1748601504026-06e3d5dfd6cc"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": [\n        {\n            \"_id\": \"68398a1a38ef509737aa1ca3\",\n            \"name\": \"New GreenCharge\",\n            \"location\": {\n                \"latitude\": 28.6139,\n                \"longitude\": 77.209\n            },\n            \"status\": \"Active\",\n            \"powerOutput\": 50,\n            \"connectorType\": \"Type2\",\n            \"createdAt\": \"2025-05-30T10:36:10.881Z\",\n            \"updatedAt\": \"2025-05-30T10:37:07.571Z\",\n            \"__v\": 0\n        }\n    ],\n    \"message\": \"Active stations retrieved successfully\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/v1/healthCheck",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"healthCheck"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Health Check",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/api/v1/healthCheck",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"healthCheck"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Age",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "public, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Content-Length",
+									"value": "165"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 May 2025 10:28:16 GMT"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"a5-T+5NZq8DH2dV6mb0SL172pJCgpE\""
+								},
+								{
+									"key": "Server",
+									"value": "Vercel"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=63072000; includeSubDomains; preload"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "X-Vercel-Cache",
+									"value": "MISS"
+								},
+								{
+									"key": "X-Vercel-Id",
+									"value": "bom1::iad1::9lv2f-1748600892975-1cbf030ffa9e"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"status\": \"OK\",\n        \"timestamp\": \"2025-05-30T10:28:16.536Z\"\n    },\n    \"message\": \"🚀 Server is running smoother than a fresh npm install!\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			],
+			"description": "Just a Route to check if the server is up and running with a fun message"
+		}
+	]
+}
