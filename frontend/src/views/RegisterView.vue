@@ -79,12 +79,13 @@ const handleRegister = async () => {
   successMessage.value = ''
 
   try {
-    // Replace with your actual API endpoint
+    // Call the backend API endpoint with credentials for future cookie support
     const response = await fetch('https://charger-crud.vercel.app/api/v1/users/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include', // Include credentials for future cookie support
       body: JSON.stringify(registerForm),
     })
 

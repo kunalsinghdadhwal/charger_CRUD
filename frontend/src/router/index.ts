@@ -1,17 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-
-function getCookie(name: string) {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()?.split(';').shift()
-  return null
-}
-
-function getAuthToken() {
-  // Check both localStorage and cookies for token
-  return localStorage.getItem('token') || getCookie('accessToken')
-}
+import { useAuth } from '../composables/useAuth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,15 +38,14 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token = getAuthToken()
-  const isAuthenticated = !!token
+  const { isAuthenticated } = useAuth()
 
   // If route requires authentication and user is not authenticated
-  if (to.meta.requiresAuth && !isAuthenticated) {
+  if (to.meta.requiresAuth && !isAuthenticated.value) {
     next('/login')
   }
   // If route requires guest (login/register) and user is authenticated
-  else if (to.meta.requiresGuest && isAuthenticated) {
+  else if (to.meta.requiresGuest && isAuthenticated.value) {
     next('/dashboard')
   }
   // Allow navigation

@@ -5,7 +5,7 @@
     <!-- Profile Info -->
     <div class="bg-white p-4 rounded shadow">
       <h2 class="text-lg font-semibold mb-2">Profile</h2>
-      <p><strong>Name:</strong> {{ user?.name }}</p>
+      <p><strong>Name:</strong> {{ user?.fullName }}</p>
       <p><strong>Email:</strong> {{ user?.email }}</p>
     </div>
 
@@ -47,55 +47,47 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useAuth } from '../composables/useAuth'
 
-const user = ref(null)
+const { user, logout, changePassword, getCurrentUser, isLoading } = useAuth()
+
 const currentPassword = ref('')
 const newPassword = ref('')
 const passwordMessage = ref('')
 const router = useRouter()
 
 const fetchProfile = async () => {
-  try {
-    const res = await axios.get('/api/auth/me', { withCredentials: true })
-    user.value = res.data.user
-  } catch (err) {
-    console.error(err)
-    router.push('/') // redirect if unauthenticated
+  const result = await getCurrentUser()
+  if (!result.success) {
+    router.push('/login')
   }
 }
 
 onMounted(fetchProfile)
 
 const handleChangePassword = async () => {
-  try {
-    await axios.post(
-      '/api/auth/change-password',
-      {
-        currentPassword: currentPassword.value,
-        newPassword: newPassword.value,
-      },
-      { withCredentials: true },
-    )
-    passwordMessage.value = 'Password changed successfully.'
+  if (!currentPassword.value || !newPassword.value) {
+    passwordMessage.value = 'Please fill in all fields.'
+    return
+  }
+
+  const result = await changePassword(currentPassword.value, newPassword.value)
+  
+  if (result.success) {
+    passwordMessage.value = result.message
     currentPassword.value = ''
     newPassword.value = ''
-  } catch (err) {
-    passwordMessage.value = 'Error changing password.'
-    console.error(err)
+  } else {
+    passwordMessage.value = result.message
   }
 }
 
 const handleLogout = async () => {
-  try {
-    await axios.post('/api/auth/logout', {}, { withCredentials: true })
-    router.push('/')
-  } catch (err) {
-    console.error(err)
-  }
+  const result = await logout()
+  router.push('/login')
 }
 </script>
 

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '../composables/useAuth'
 
 const router = useRouter()
+const { login, isLoading } = useAuth()
 
 // Form data
 const loginForm = reactive({
@@ -11,7 +13,6 @@ const loginForm = reactive({
 })
 
 // Form state
-const isLoading = ref(false)
 const errorMessage = ref('')
 const showPassword = ref(false)
 
@@ -54,40 +55,14 @@ const validateForm = () => {
 const handleLogin = async () => {
   if (!validateForm()) return
 
-  isLoading.value = true
   errorMessage.value = ''
 
-  try {
-    // Replace with your actual API endpoint
-    const response = await fetch('https://charger-crud.vercel.app/api/v1/users/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(loginForm),
-    })
-
-    const data = await response.json()
-
-    if (response.ok && data.success) {
-      // Store tokens and user data according to API response structure
-      localStorage.setItem('token', data.data.accessToken)
-      localStorage.setItem('refreshToken', data.data.refreshToken)
-      localStorage.setItem('user', JSON.stringify(data.data.user))
-
-      // Trigger storage event to update auth state across components
-      window.dispatchEvent(new Event('storage'))
-
-      // Redirect to dashboard
-      router.push('/dashboard')
-    } else {
-      errorMessage.value = data.message || 'Login failed'
-    }
-  } catch (error) {
-    console.error('Login error:', error)
-    errorMessage.value = 'Network error. Please try again.'
-  } finally {
-    isLoading.value = false
+  const result = await login(loginForm.email, loginForm.password)
+  
+  if (result.success) {
+    router.push('/dashboard')
+  } else {
+    errorMessage.value = result.message || 'Login failed'
   }
 }
 
