@@ -18,7 +18,7 @@
               real-time.
             </p>
             <div class="hero-actions">
-              <router-link to="/dashboard" class="btn btn-primary btn-large">
+              <router-link to="/register" class="btn btn-primary btn-large">
                 <span class="btn-icon">⚡</span>
                 Get Started
               </router-link>

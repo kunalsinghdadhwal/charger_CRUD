@@ -1,5 +1,4 @@
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import type { User } from '../types/auth'
 
 const API_BASE_URL = 'https://charger-crud.vercel.app/api/v1'
@@ -30,8 +29,6 @@ const getCookie = (name: string): string | null => {
 }
 
 export const useAuth = () => {
-    const router = useRouter()
-
     // Computed properties
     const isAuthenticated = computed(() => {
         // Check if user exists in memory and if access token cookie exists
@@ -54,7 +51,7 @@ export const useAuth = () => {
 
             const data = await response.json()
 
-            if (response.ok && data.success) {
+            if (data.success) {
                 // Store user data in localStorage and reactive state
                 user.value = data.data.user
                 localStorage.setItem('user', JSON.stringify(data.data.user))
@@ -62,13 +59,16 @@ export const useAuth = () => {
                 // Trigger storage event for cross-component updates
                 window.dispatchEvent(new Event('storage'))
 
+                // Note: Cookies are automatically set by the backend with httpOnly flag
+                // The backend sets both accessToken and refreshToken cookies
+
                 return { success: true, user: data.data.user }
             } else {
                 return { success: false, message: data.message || 'Login failed' }
             }
         } catch (error) {
             console.error('Login error:', error)
-            return { success: false, message: 'Network error. Please try again.' }
+            return { success: false, message: 'Invalid Credentials. Please try again.' }
         } finally {
             isLoading.value = false
         }
@@ -116,6 +116,7 @@ export const useAuth = () => {
                 method: 'GET',
                 credentials: 'include',
             })
+            console.log('Get current user response:', response)
 
             if (response.ok) {
                 const data = await response.json()
@@ -203,8 +204,10 @@ export const useAuth = () => {
                         credentials: 'include',
                     })
                 } else {
-                    // Refresh failed, redirect to login
-                    router.push('/login')
+                    // Refresh failed, clear auth state
+                    // Navigation will be handled by the router guard
+                    user.value = null
+                    localStorage.removeItem('user')
                     return response
                 }
             }

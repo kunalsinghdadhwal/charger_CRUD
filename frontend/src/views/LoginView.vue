@@ -60,7 +60,8 @@ const handleLogin = async () => {
   const result = await login(loginForm.email, loginForm.password)
   
   if (result.success) {
-    router.push('/dashboard')
+    // Navigation will be handled by router after auth state updates
+    await router.push('/dashboard')
   } else {
     errorMessage.value = result.message || 'Login failed'
   }
@@ -80,14 +81,14 @@ const togglePasswordVisibility = () => {
     <div class="login-card">
       <!-- Header -->
       <div class="login-header">
-        <div class="brand-icon">⚡</div>
+        <div class="brand-icon">EV</div>
         <h1 class="login-title">Welcome Back</h1>
         <p class="login-subtitle">Sign in to your EV Manager account</p>
       </div>
 
       <!-- Error Message -->
       <div v-if="errorMessage" class="error-alert">
-        <span class="error-icon">⚠️</span>
+        <span class="error-icon">!</span>
         {{ errorMessage }}
       </div>
 
@@ -97,7 +98,6 @@ const togglePasswordVisibility = () => {
         <div class="form-group">
           <label for="email" class="form-label">Email Address</label>
           <div class="input-wrapper">
-            <span class="input-icon">📧</span>
             <input
               id="email"
               v-model="loginForm.email"
@@ -115,7 +115,6 @@ const togglePasswordVisibility = () => {
         <div class="form-group">
           <label for="password" class="form-label">Password</label>
           <div class="input-wrapper">
-            <span class="input-icon">🔒</span>
             <input
               id="password"
               v-model="loginForm.password"
@@ -126,7 +125,7 @@ const togglePasswordVisibility = () => {
               autocomplete="current-password"
             />
             <button type="button" @click="togglePasswordVisibility" class="password-toggle">
-              {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+              {{ showPassword ? 'Hide' : 'Show' }}
             </button>
           </div>
           <span v-if="passwordError" class="field-error">{{ passwordError }}</span>
@@ -158,6 +157,7 @@ const togglePasswordVisibility = () => {
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 .login-card {
@@ -194,7 +194,9 @@ const togglePasswordVisibility = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
   margin: 0 auto 1rem;
   box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
@@ -227,6 +229,7 @@ const togglePasswordVisibility = () => {
 
 .error-icon {
   flex-shrink: 0;
+  font-weight: 700;
 }
 
 .login-form {
@@ -253,17 +256,9 @@ const togglePasswordVisibility = () => {
   align-items: center;
 }
 
-.input-icon {
-  position: absolute;
-  left: 1rem;
-  color: #9ca3af;
-  font-size: 1.1rem;
-  z-index: 1;
-}
-
 .form-input {
   width: 100%;
-  padding: 0.875rem 1rem 0.875rem 3rem;
+  padding: 0.875rem 1rem;
   border: 2px solid #e5e7eb;
   border-radius: 12px;
   font-size: 1rem;
@@ -287,13 +282,14 @@ const togglePasswordVisibility = () => {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.1rem;
-  color: #9ca3af;
+  font-size: 0.875rem;
+  color: #667eea;
+  font-weight: 500;
   transition: color 0.3s ease;
 }
 
 .password-toggle:hover {
-  color: #667eea;
+  color: #764ba2;
 }
 
 .field-error {
@@ -387,7 +383,7 @@ const togglePasswordVisibility = () => {
   .brand-icon {
     width: 50px;
     height: 50px;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 }
 </style>

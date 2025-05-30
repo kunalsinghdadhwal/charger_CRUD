@@ -85,11 +85,11 @@ const handleRegister = async () => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include', // Include credentials for future cookie support
       body: JSON.stringify(registerForm),
     })
 
     const data = await response.json()
-    console.log(data)
 
     if (response.ok && data.success) {
       successMessage.value = data.message || 'Account created successfully! Redirecting to login...'
@@ -130,20 +130,20 @@ const togglePasswordVisibility = () => {
     <div class="register-card">
       <!-- Header -->
       <div class="register-header">
-        <div class="brand-icon">⚡</div>
+        <div class="brand-icon">EV</div>
         <h1 class="register-title">Create Account</h1>
         <p class="register-subtitle">Join EV Manager and start managing your charging stations</p>
       </div>
 
       <!-- Success Message -->
       <div v-if="successMessage" class="success-alert">
-        <span class="success-icon">✅</span>
+        <span class="success-icon">✓</span>
         {{ successMessage }}
       </div>
 
       <!-- Error Message -->
       <div v-if="errorMessage" class="error-alert">
-        <span class="error-icon">⚠️</span>
+        <span class="error-icon">!</span>
         {{ errorMessage }}
       </div>
 
@@ -153,7 +153,6 @@ const togglePasswordVisibility = () => {
         <div class="form-group">
           <label for="fullName" class="form-label">Full Name</label>
           <div class="input-wrapper">
-            <span class="input-icon">👤</span>
             <input
               id="fullName"
               v-model="registerForm.fullName"
@@ -171,7 +170,6 @@ const togglePasswordVisibility = () => {
         <div class="form-group">
           <label for="email" class="form-label">Email Address</label>
           <div class="input-wrapper">
-            <span class="input-icon">📧</span>
             <input
               id="email"
               v-model="registerForm.email"
@@ -189,7 +187,6 @@ const togglePasswordVisibility = () => {
         <div class="form-group">
           <label for="password" class="form-label">Password</label>
           <div class="input-wrapper">
-            <span class="input-icon">🔒</span>
             <input
               id="password"
               v-model="registerForm.password"
@@ -200,7 +197,7 @@ const togglePasswordVisibility = () => {
               autocomplete="new-password"
             />
             <button type="button" @click="togglePasswordVisibility" class="password-toggle">
-              {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+              {{ showPassword ? 'Hide' : 'Show' }}
             </button>
           </div>
           <span v-if="passwordError" class="field-error">{{ passwordError }}</span>
@@ -249,6 +246,7 @@ const togglePasswordVisibility = () => {
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 .register-card {
@@ -285,7 +283,9 @@ const togglePasswordVisibility = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
   margin: 0 auto 1rem;
   box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
@@ -333,6 +333,7 @@ const togglePasswordVisibility = () => {
 .success-icon,
 .error-icon {
   flex-shrink: 0;
+  font-weight: 700;
 }
 
 .register-form {
@@ -359,17 +360,9 @@ const togglePasswordVisibility = () => {
   align-items: center;
 }
 
-.input-icon {
-  position: absolute;
-  left: 1rem;
-  color: #9ca3af;
-  font-size: 1.1rem;
-  z-index: 1;
-}
-
 .form-input {
   width: 100%;
-  padding: 0.875rem 1rem 0.875rem 3rem;
+  padding: 0.875rem 1rem;
   border: 2px solid #e5e7eb;
   border-radius: 12px;
   font-size: 1rem;
@@ -393,13 +386,14 @@ const togglePasswordVisibility = () => {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.1rem;
-  color: #9ca3af;
+  font-size: 0.875rem;
+  color: #667eea;
+  font-weight: 500;
   transition: color 0.3s ease;
 }
 
 .password-toggle:hover {
-  color: #667eea;
+  color: #764ba2;
 }
 
 .field-error {
@@ -544,7 +538,7 @@ const togglePasswordVisibility = () => {
   .brand-icon {
     width: 50px;
     height: 50px;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 }
 </style>

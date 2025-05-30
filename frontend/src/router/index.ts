@@ -37,12 +37,20 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from, next) => {
-  const { isAuthenticated } = useAuth()
+router.beforeEach(async (to, from, next) => {
+  const { isAuthenticated, getCurrentUser } = useAuth()
 
-  // If route requires authentication and user is not authenticated
-  if (to.meta.requiresAuth && !isAuthenticated.value) {
-    next('/login')
+  // For routes that require authentication, verify the user is actually authenticated
+  if (to.meta.requiresAuth) {
+    if (!isAuthenticated.value) {
+      // Try to get current user from backend to verify authentication
+      const result = await getCurrentUser()
+      if (!result.success) {
+        next('/login')
+        return
+      }
+    }
+    next()
   }
   // If route requires guest (login/register) and user is authenticated
   else if (to.meta.requiresGuest && isAuthenticated.value) {
