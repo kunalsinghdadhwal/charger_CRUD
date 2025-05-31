@@ -209,10 +209,11 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 const getCurrentUser = asyncHandler(async (req, res) => {
   const user = req.user;
   const formattedUser = {
-    ...user,
+    ...user._doc,
     fullName: user.fullName,
   };
   delete formattedUser.fullName;
+  console.log(formattedUser);
   return res
     .status(200)
     .json(
