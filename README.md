@@ -5,7 +5,7 @@ A comprehensive full-stack web application for managing Electric Vehicle (EV) ch
 ## 🌐 Deployment
 
 ### Live Application
-- **Frontend**: [https://charger-crud.netlify.app](https://charger-crud-front.vercel.app)
+- **Frontend**: [https://charger-crud-front.vercel.app](https://charger-crud-front.vercel.app)
 - **Backend API**: [https://charger-crud.vercel.app](https://charger-crud.vercel.app)
 
 ## 🧪 API Testing
